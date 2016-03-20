@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>MIROC GUI v01</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -124,9 +124,15 @@
   	
   	<div class="page-header">
   		<h1>Simulated E-Field</h1>
-  		<p>Displays data from a semi-live calculation, based on last n diode strikes</p>
+  		<p>Displays data from a live calculation, based on last diode strike, in units of mV/m</p>
   	</div>
-  	<h3>12 mV/m</h3>
+  	<h3 id="eFieldValue"></h3>
+  	
+  	<div class="page-header">
+  		<h1>Last Diode Struck</h1>
+  		<p>Displays most recent diode struck</p>
+  	</div>
+  	<h3 id="lastDiode"></h3>
 
   	
   	<div class="page-header">
@@ -163,33 +169,74 @@
          		counts: 0
          	});
          }
-				
-		// Create arrays for FWHM chart
-		// TODO update to do this with dynamically received data
-		/* static case
-		var counts = []; // array of counts
-		var dataArray = []; //array of strike data
-		for (var i = 0; i < 256; i++) {
-			dataArray.push({
-				bin: i,
-				counts: Math.floor(Math.random() * 200) + 1 
-			});
-		}
 
-		new Morris.Bar({
-			element: 'FWHMChart',
-			data: dataArray,
-			xkey: 'bin',
-			ykeys: ['counts'],
-			labels: ['Strikes']
-		});
-		*/
 		
 		function updateFWHMDataArray(datapoint) {
 			FWHMDataArray[datapoint.bin].counts += 1;
-		}
+		};
+		
+		function updateEFieldValue(diode) {
+			document.getElementById('eFieldValue').innerHTML = diode * 40;
+			document.getElementById('lastDiode').innerHTML = diode;
+		};
+		
+		function updateTable() {
+			
+				document.getElementById('row1').innerHTML = strikeDataArray[0].strike;
+				document.getElementById('time1').innerHTML = strikeDataArray[0].time;
+				document.getElementById('diode1').innerHTML = strikeDataArray[0].diode;
+				document.getElementById('energy1').innerHTML = strikeDataArray[0].energy;
 
-//TODO try to figure out how to update this dynamically with rcvd data		
+				document.getElementById('row2').innerHTML = strikeDataArray[1].strike;
+				document.getElementById('time2').innerHTML = strikeDataArray[1].time;
+				document.getElementById('diode2').innerHTML = strikeDataArray[1].diode;
+				document.getElementById('energy2').innerHTML = strikeDataArray[1].energy;
+
+				document.getElementById('row3').innerHTML = strikeDataArray[2].strike;
+				document.getElementById('time3').innerHTML = strikeDataArray[2].time;
+				document.getElementById('diode3').innerHTML = strikeDataArray[2].diode;
+				document.getElementById('energy3').innerHTML = strikeDataArray[2].energy;
+			
+				document.getElementById('row4').innerHTML = strikeDataArray[3].strike;
+				document.getElementById('time4').innerHTML = strikeDataArray[3].time;
+				document.getElementById('diode4').innerHTML = strikeDataArray[3].diode;
+				document.getElementById('energy4').innerHTML = strikeDataArray[3].energy;
+			
+				document.getElementById('row5').innerHTML = strikeDataArray[4].strike;
+				document.getElementById('time5').innerHTML = strikeDataArray[4].time;
+				document.getElementById('diode5').innerHTML = strikeDataArray[4].diode;
+				document.getElementById('energy5').innerHTML = strikeDataArray[4].energy;
+			
+				document.getElementById('row6').innerHTML = strikeDataArray[5].strike;
+				document.getElementById('time6').innerHTML = strikeDataArray[5].time;
+				document.getElementById('diode6').innerHTML = strikeDataArray[5].diode;
+				document.getElementById('energy6').innerHTML = strikeDataArray[5].energy;
+			
+				document.getElementById('row7').innerHTML = strikeDataArray[6].strike;
+				document.getElementById('time7').innerHTML = strikeDataArray[6].time;
+				document.getElementById('diode7').innerHTML = strikeDataArray[6].diode;
+				document.getElementById('energy7').innerHTML = strikeDataArray[6].energy;
+			
+				document.getElementById('row8').innerHTML = strikeDataArray[7].strike;
+				document.getElementById('time8').innerHTML = strikeDataArray[7].time;
+				document.getElementById('diode8').innerHTML = strikeDataArray[7].diode;
+				document.getElementById('energy8').innerHTML = strikeDataArray[7].energy;
+			
+				document.getElementById('row9').innerHTML = strikeDataArray[8].strike;
+				document.getElementById('time9').innerHTML = strikeDataArray[8].time;
+				document.getElementById('diode9').innerHTML = strikeDataArray[8].diode;
+				document.getElementById('energy9').innerHTML = strikeDataArray[8].energy;
+			
+				document.getElementById('row10').innerHTML = strikeDataArray[9].strike;
+				document.getElementById('time10').innerHTML = strikeDataArray[9].time;
+				document.getElementById('diode10').innerHTML = strikeDataArray[9].diode;
+				document.getElementById('energy10').innerHTML = strikeDataArray[9].energy;
+		};
+				
+		function updateChart() {
+				FWHMChart.setData(FWHMDataArray);
+		};
+	
 		var FWHMChart = Morris.Bar({
 			element: 'FWHMChart',
 			data: FWHMDataArray,
@@ -220,63 +267,14 @@
                   var received_msg = JSON.parse(evt.data);
                   alert("Message is received...");
                   strikeDataArray.unshift(received_msg);
-                  
+                  updateEFieldValue(strikeDataArray[0].diode);
                   updateFWHMDataArray(received_msg);
-                  
-				document.getElementById('row1').innerHTML = strikeDataArray[0].strike;
-				document.getElementById('time1').innerHTML = strikeDataArray[0].time;
-				document.getElementById('diode1').innerHTML = strikeDataArray[0].diode;
-				document.getElementById('energy1').innerHTML = strikeDataArray[0].energy;
-	
-				document.getElementById('row2').innerHTML = strikeDataArray[1].strike;
-				document.getElementById('time2').innerHTML = strikeDataArray[1].time;
-				document.getElementById('diode2').innerHTML = strikeDataArray[1].diode;
-				document.getElementById('energy2').innerHTML = strikeDataArray[1].energy;
-	
-				document.getElementById('row3').innerHTML = strikeDataArray[2].strike;
-				document.getElementById('time3').innerHTML = strikeDataArray[2].time;
-				document.getElementById('diode3').innerHTML = strikeDataArray[2].diode;
-				document.getElementById('energy3').innerHTML = strikeDataArray[2].energy;
-                
-                document.getElementById('row4').innerHTML = strikeDataArray[3].strike;
-				document.getElementById('time4').innerHTML = strikeDataArray[3].time;
-				document.getElementById('diode4').innerHTML = strikeDataArray[3].diode;
-				document.getElementById('energy4').innerHTML = strikeDataArray[3].energy;
-				
-				document.getElementById('row5').innerHTML = strikeDataArray[4].strike;
-				document.getElementById('time5').innerHTML = strikeDataArray[4].time;
-				document.getElementById('diode5').innerHTML = strikeDataArray[4].diode;
-				document.getElementById('energy5').innerHTML = strikeDataArray[4].energy;
-				
-				document.getElementById('row6').innerHTML = strikeDataArray[5].strike;
-				document.getElementById('time6').innerHTML = strikeDataArray[5].time;
-				document.getElementById('diode6').innerHTML = strikeDataArray[5].diode;
-				document.getElementById('energy6').innerHTML = strikeDataArray[5].energy;
-				
-				document.getElementById('row7').innerHTML = strikeDataArray[6].strike;
-				document.getElementById('time7').innerHTML = strikeDataArray[6].time;
-				document.getElementById('diode7').innerHTML = strikeDataArray[6].diode;
-				document.getElementById('energy7').innerHTML = strikeDataArray[6].energy;
-				
-				document.getElementById('row8').innerHTML = strikeDataArray[7].strike;
-				document.getElementById('time8').innerHTML = strikeDataArray[7].time;
-				document.getElementById('diode8').innerHTML = strikeDataArray[7].diode;
-				document.getElementById('energy8').innerHTML = strikeDataArray[7].energy;
-				
-				document.getElementById('row9').innerHTML = strikeDataArray[8].strike;
-				document.getElementById('time9').innerHTML = strikeDataArray[8].time;
-				document.getElementById('diode9').innerHTML = strikeDataArray[8].diode;
-				document.getElementById('energy9').innerHTML = strikeDataArray[8].energy;
-				
-				document.getElementById('row10').innerHTML = strikeDataArray[9].strike;
-				document.getElementById('time10').innerHTML = strikeDataArray[9].time;
-				document.getElementById('diode10').innerHTML = strikeDataArray[9].diode;
-				document.getElementById('energy10').innerHTML = strikeDataArray[9].energy;
-				  
-				  // TODO this does not work - fix
-				FWHMChart.setData(FWHMDataArray);
 				
                };
+               setInterval(function(){updateChart();},5000);
+               //setInterval(function(){updateEFieldValue(strikeDataArray[0].diode);},1000);
+               setInterval(function(){updateTable();},2000);
+               
 				
                ws.onclose = function()
                { 
