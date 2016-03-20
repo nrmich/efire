@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    
+    
+    <!-- Morris -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  
+  	<div class="container theme-showcase" role="main">
+  	
+  	<div class="row">
+  	<div class="col-md-6">
+  		<div class="jumbotron">
+  			<h1>MIROC2 Data Display</h1>
+  			<p>This displays the current and historical data output from MIROC2</p>
+  		</div>
+  	</div>
+  	<div class="col-md-6">
+  		<img src="EFIRE_Logo_Neil.jpg" alt="E-FIRE Project Logo" />
+  	</div>
+  	</div>
+  	
+  	<div class="page-header">
+  		<h1>Strike History Table</h1>
+  	</div>
+  	<div>
+  	<table class="table table-striped">
+  		<thead>
+  			<tr>
+  				<th>Strike #</th>
+  				<th>Time</th>
+  				<th>Diode</th>
+  				<th>Energy (keV)</th>
+  			</tr>
+  		</thead>
+  		<tbody>
+  			<tr>
+  				<td id="row1"></td>
+  				<td id="time1"></td>
+  				<td id="diode1"></td>
+  				<td id="energy1"></td>
+  			</tr>
+  			<tr>
+  				<td id="row2"></td>
+  				<td id="time2"></td>
+  				<td id="diode2"></td>
+  				<td id="energy2"></td>
+  			</tr>
+  			<tr>
+  				<td id="row3"></td>
+  				<td id="time3"></td>
+  				<td id="diode3"></td>
+  				<td id="energy3"></td>
+  			</tr>
+  			<tr>
+  				<td id="row4"></td>
+  				<td id="time4"></td>
+  				<td id="diode4"></td>
+  				<td id="energy4"></td>
+  			</tr>
+  			<tr>
+  				<td id="row5"></td>
+  				<td id="time5"></td>
+  				<td id="diode5"></td>
+  				<td id="energy5"></td>
+  			</tr>
+  			<tr>
+  				<td id="row6"></td>
+  				<td id="time6"></td>
+  				<td id="diode6"></td>
+  				<td id="energy6"></td>
+  			</tr>
+  			<tr>
+  				<td id="row7"></td>
+  				<td id="time7"></td>
+  				<td id="diode7"></td>
+  				<td id="energy7"></td>
+  			</tr>
+  			<tr>
+  				<td id="row8"></td>
+  				<td id="time8"></td>
+  				<td id="diode8"></td>
+  				<td id="energy8"></td>
+  			</tr>
+  			<tr>
+  				<td id="row9"></td>
+  				<td id="time9"></td>
+  				<td id="diode9"></td>
+  				<td id="energy9"></td>
+  			</tr>
+  			<tr>
+  				<td id="row10"></td>
+  				<td id="time10"></td>
+  				<td id="diode10"></td>
+  				<td id="energy10"></td>
+  			</tr>
+  		</tbody>
+  	</table>
+  	</div>
+  	
+  	<div class="page-header">
+  		<h1>Simulated E-Field</h1>
+  		<p>Displays data from a semi-live calculation, based on last n diode strikes</p>
+  	</div>
+  	<h3>12 mV/m</h3>
+
+  	
+  	<div class="page-header">
+  		<h1>Energy Bucket Strike History Chart</h1>
+  		<p>This	displays a history of strikes on each channel, used to study FWHM noise through our system.</p>
+  	</div>
+  	
+  	<!-- <div id="myfirstchart" style="height: 250px;"></div> -->
+  	
+  	<div class="chart" id="FWHMChart" style="height: 250px;"></div>
+  			
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script> -->
+	<script src="raphael-min.js"></script>
+	<script src="morris.js-0.5.1/morris.min.js"></script>
+    
+    
+    <div id="sse">
+    	<a href="javascript:WebSocketTest()">Run WebSocket</a>
+    </div>
+    
+    
+    <script type="text/javascript">
+         var strikeDataArray = [];
+         var FWHMDataArray = [];
+         
+         for (var i = 0; i < 256; i++) {
+         	FWHMDataArray.push({
+         		bin: i,
+         		counts: 0
+         	});
+         }
+				
+		// Create arrays for FWHM chart
+		// TODO update to do this with dynamically received data
+		/* static case
+		var counts = []; // array of counts
+		var dataArray = []; //array of strike data
+		for (var i = 0; i < 256; i++) {
+			dataArray.push({
+				bin: i,
+				counts: Math.floor(Math.random() * 200) + 1 
+			});
+		}
+
+		new Morris.Bar({
+			element: 'FWHMChart',
+			data: dataArray,
+			xkey: 'bin',
+			ykeys: ['counts'],
+			labels: ['Strikes']
+		});
+		*/
+		
+		function updateFWHMDataArray(datapoint) {
+			FWHMDataArray[datapoint.bin].counts += 1;
+		}
+
+//TODO try to figure out how to update this dynamically with rcvd data		
+		var FWHMChart = Morris.Bar({
+			element: 'FWHMChart',
+			data: FWHMDataArray,
+			xkey: 'bin',
+			ykeys: ['counts'],
+			labels: ['Strikes']
+		});
+
+		         
+         function WebSocketTest()
+         {
+            if ("WebSocket" in window)
+            {
+               alert("WebSocket is supported by your Browser!");
+               
+               // Let us open a web socket
+               var ws = new WebSocket("ws://localhost:8080/", "echo-protocol");
+				
+               ws.onopen = function()
+               {
+                  // Web Socket is connected, send data using send()
+                  ws.send("Message to send");
+                  alert("Message is sent...");
+               };
+				
+               ws.onmessage = function (evt) 
+               { 
+                  var received_msg = JSON.parse(evt.data);
+                  alert("Message is received...");
+                  strikeDataArray.unshift(received_msg);
+                  
+                  updateFWHMDataArray(received_msg);
+                  
+				document.getElementById('row1').innerHTML = strikeDataArray[0].strike;
+				document.getElementById('time1').innerHTML = strikeDataArray[0].time;
+				document.getElementById('diode1').innerHTML = strikeDataArray[0].diode;
+				document.getElementById('energy1').innerHTML = strikeDataArray[0].energy;
+	
+				document.getElementById('row2').innerHTML = strikeDataArray[1].strike;
+				document.getElementById('time2').innerHTML = strikeDataArray[1].time;
+				document.getElementById('diode2').innerHTML = strikeDataArray[1].diode;
+				document.getElementById('energy2').innerHTML = strikeDataArray[1].energy;
+	
+				document.getElementById('row3').innerHTML = strikeDataArray[2].strike;
+				document.getElementById('time3').innerHTML = strikeDataArray[2].time;
+				document.getElementById('diode3').innerHTML = strikeDataArray[2].diode;
+				document.getElementById('energy3').innerHTML = strikeDataArray[2].energy;
+                
+                document.getElementById('row4').innerHTML = strikeDataArray[3].strike;
+				document.getElementById('time4').innerHTML = strikeDataArray[3].time;
+				document.getElementById('diode4').innerHTML = strikeDataArray[3].diode;
+				document.getElementById('energy4').innerHTML = strikeDataArray[3].energy;
+				
+				document.getElementById('row5').innerHTML = strikeDataArray[4].strike;
+				document.getElementById('time5').innerHTML = strikeDataArray[4].time;
+				document.getElementById('diode5').innerHTML = strikeDataArray[4].diode;
+				document.getElementById('energy5').innerHTML = strikeDataArray[4].energy;
+				
+				document.getElementById('row6').innerHTML = strikeDataArray[5].strike;
+				document.getElementById('time6').innerHTML = strikeDataArray[5].time;
+				document.getElementById('diode6').innerHTML = strikeDataArray[5].diode;
+				document.getElementById('energy6').innerHTML = strikeDataArray[5].energy;
+				
+				document.getElementById('row7').innerHTML = strikeDataArray[6].strike;
+				document.getElementById('time7').innerHTML = strikeDataArray[6].time;
+				document.getElementById('diode7').innerHTML = strikeDataArray[6].diode;
+				document.getElementById('energy7').innerHTML = strikeDataArray[6].energy;
+				
+				document.getElementById('row8').innerHTML = strikeDataArray[7].strike;
+				document.getElementById('time8').innerHTML = strikeDataArray[7].time;
+				document.getElementById('diode8').innerHTML = strikeDataArray[7].diode;
+				document.getElementById('energy8').innerHTML = strikeDataArray[7].energy;
+				
+				document.getElementById('row9').innerHTML = strikeDataArray[8].strike;
+				document.getElementById('time9').innerHTML = strikeDataArray[8].time;
+				document.getElementById('diode9').innerHTML = strikeDataArray[8].diode;
+				document.getElementById('energy9').innerHTML = strikeDataArray[8].energy;
+				
+				document.getElementById('row10').innerHTML = strikeDataArray[9].strike;
+				document.getElementById('time10').innerHTML = strikeDataArray[9].time;
+				document.getElementById('diode10').innerHTML = strikeDataArray[9].diode;
+				document.getElementById('energy10').innerHTML = strikeDataArray[9].energy;
+				  
+				  // TODO this does not work - fix
+				FWHMChart.setData(FWHMDataArray);
+				
+               };
+				
+               ws.onclose = function()
+               { 
+                  // websocket is closed.
+                  alert("Connection is closed..."); 
+               };
+            }
+            
+            else
+            {
+               // The browser doesn't support WebSocket
+               alert("WebSocket NOT supported by your Browser!");
+            }
+         }
+      </script>
+		
+    
+  </body>
+</html>
