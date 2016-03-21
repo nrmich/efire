@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>MIROC GUI v01</title>
+    <title>MIROC GUI v02</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -253,7 +253,8 @@
                alert("WebSocket is supported by your Browser!");
                
                // Let us open a web socket
-               var ws = new WebSocket("ws://localhost:8080/", "echo-protocol");
+               var ws = new WebSocket("ws://localhost:8080/DataServer");
+			   //var ws = new WebSocket("ws://localhost:8080/", "echo-protocol");
 				
                ws.onopen = function()
                {
@@ -266,14 +267,22 @@
                { 
                   var received_msg = JSON.parse(evt.data);
                   alert("Message is received...");
+				  alert(evt.data);
+				  
+				  ws.send("Message to send");
+                  alert("Message is sent...");
                   strikeDataArray.unshift(received_msg);
                   updateEFieldValue(strikeDataArray[0].diode);
                   updateFWHMDataArray(received_msg);
+				  
+				  updateChart();
+				  updateEFieldValue(strikeDataArray[0].diode);
+				  updateTable();
 				
                };
-               setInterval(function(){updateChart();},5000);
+               //setInterval(function(){updateChart();},5000);
                //setInterval(function(){updateEFieldValue(strikeDataArray[0].diode);},1000);
-               setInterval(function(){updateTable();},2000);
+               //setInterval(function(){updateTable();},2000);
                
 				
                ws.onclose = function()
