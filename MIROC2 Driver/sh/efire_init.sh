@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/bin/bash/
 #Initialize the GPIOs used by the EFIRE Driver
 echo "Initalizing EFIRE/MIROC2 Driver Software"
@@ -6,13 +5,6 @@ echo "Initalizing GPIO Pins"
 pushd /sys/class/gpio > /dev/null
 
 echo "ADDR Pins"
-=======
-\#!/bin/bash/
-#Initialize the GPIOs used by the EFIRE Driver.
-echo "Initalizing EFIRE/MIROC2 Driver Software"
-echo "Initalizing GPIO Pins"
-pushd /sys/class/gpio > /dev/null
->>>>>>> master
 sh -c "echo 22 > export"
 echo out > ./gpio22/direction
 echo 0 > ./gpio22/value
@@ -43,7 +35,6 @@ echo 0 > ./gpio8/value
 GPIO8_dir="$(cat ./gpio8/direction)"
 GPIO8_val="$(cat ./gpio8/value)"
 echo "GPIO8 direction is ${GPIO8_dir} and value is ${GPIO8_val}"
-<<<<<<< HEAD
 
 echo "P&H Reset"
 sh -c "echo 60 > export"
@@ -72,9 +63,6 @@ echo 0 > ./gpio51/value
 GPIO51_dir="$(cat ./gpio51/direction)"
 GPIO51_val="$(cat ./gpio51/value)"
 echo "GPIO51 direction is ${GPIO51_dir} and value is ${GPIO51_val}"
-
-=======
->>>>>>> master
 popd > /dev/null
 echo "GPIO Pins Initalized"
 echo "Initalizing DTO"
@@ -89,11 +77,7 @@ if [[ "$INPUT" == y* ]]
 		./fixedclock
 		read -p "Press enter to end TEST_CLK"
 		./halt_cmd
-<<<<<<< HEAD
 		popd > /dev/null
-=======
-		popd
->>>>>>> master
 elif [[ "$INPUT" == n* ]]
 	then
 		echo "Not running TEST_CLK. TEST_CLK can be run from /efire/clock/mod/"
