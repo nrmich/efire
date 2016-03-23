@@ -266,11 +266,11 @@
                ws.onmessage = function (evt) 
                { 
                   var received_msg = JSON.parse(evt.data);
-                  alert("Message is received...");
-				  alert(evt.data);
+                  //alert("Message is received...");
+				  //alert(evt.data);
 				  
-				  ws.send("Message to send");
-                  alert("Message is sent...");
+				  //ws.send("Message to send");
+                  //alert("Message is sent...");
                   strikeDataArray.unshift(received_msg);
                   updateEFieldValue(strikeDataArray[0].diode);
                   updateFWHMDataArray(received_msg);

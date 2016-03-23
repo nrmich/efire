@@ -23,6 +23,13 @@ namespace Team_E_FIRE_Data_Processing_Program_BBB
             electronEnergy = bin * 4;
         }
 
+        public string createStrikeJSON()
+        {
+            // var msg = "{strike: 1, time: 0:00, diode: 1, energy: 500, bin: 0}";
+            return "{\"strike\":" + eStrike.strikeNumber.ToString() + ",\"time\":\"" + strikeTime + "\",\"diode\":" +
+                diodeStruck + ",\"energy\":" + electronEnergy + ",\"bin\":" + bin + "}";
+        }
+
         //Nate temp: function to create a Gaussian distribution
         public int randomBin(int mean, int stdDev)
         {

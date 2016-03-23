@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using Team_E_FIRE_Data_Processing_Program_BBB;
+using System.Timers;
+using System.Threading;
 
 namespace EFIRE_Interface_Program
 {
@@ -25,14 +27,34 @@ namespace EFIRE_Interface_Program
 
     public class DataServer : WebSocketBehavior
     {
+        //Nate TODO timer is better than sleep
+        //private static Timer strikeTimer;
+
+        //private void setTimer() //static?
+        //{
+        //    strikeTimer = new Timer(100);
+        //    strikeTimer.Elapsed += onTimedEvent;
+        //    strikeTimer.AutoReset = true;
+        //    strikeTimer.Enabled = true;
+        //}
+
+        //private void onTimedEvent(Object source, ElapsedEventArgs e) //static?
+        //{
+        //    eStrike nextStrike = new eStrike();
+        //    string msg = nextStrike.createStrikeJSON();
+        //    Send(msg); //problem when the above are static
+        //}
+
         protected override void OnMessage(MessageEventArgs e)
         {
-            // var msg = "{strike: 1, time: 0:00, diode: 1, energy: 500, bin: 0}";
-            eStrike nextStrike = new eStrike();
-            string msg = "{\"strike\":" + eStrike.strikeNumber.ToString() + ",\"time\":\"" + nextStrike.strikeTime + "\",\"diode\":" +
-                nextStrike.diodeStruck + ",\"energy\":" + nextStrike.electronEnergy + ",\"bin\":" + nextStrike.bin + "}";
-            Send(msg);
-            //Send(e.Data);
+            //setTimer();
+            while(true)
+            {
+                eStrike nextStrike = new eStrike();
+                string msg = nextStrike.createStrikeJSON();
+                Send(msg);
+                Thread.Sleep(10);
+            }
         }
     }
     public partial class MainWindow : Window
@@ -48,7 +70,6 @@ namespace EFIRE_Interface_Program
             var wssv = new WebSocketServer(8080);
             wssv.AddWebSocketService<DataServer>("/DataServer");
             wssv.Start();
-
             //{strike: n, time:, diode:, energy:, bin:}
         }
     }

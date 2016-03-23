@@ -12,3 +12,17 @@ C:\Users\Nathaniel\Desktop\EFIRE\EFIRE Interface Program\EFIRE Interface Program
 C:\Users\Nathaniel\Desktop\EFIRE\EFIRE Interface Program\EFIRE Interface Program\bin\Debug\websocket-sharp.dll
 C:\Users\Nathaniel\Desktop\EFIRE\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE Interface Program.exe
 C:\Users\Nathaniel\Desktop\EFIRE\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE Interface Program.pdb
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\bin\Debug\EFIRE Interface Program.exe.config
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE Interface Program.exe
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE Interface Program.pdb
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\bin\Debug\EFIRE Interface Program.exe
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\bin\Debug\EFIRE Interface Program.pdb
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\bin\Debug\websocket-sharp.dll
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE Interface Program.csprojResolveAssemblyReference.cache
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\MainWindow.baml
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\MainWindow.g.cs
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\App.g.cs
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE Interface Program_MarkupCompile.cache
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE Interface Program.g.resources
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE_Interface_Program.Properties.Resources.resources
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\Debug\EFIRE Interface Program.csproj.GenerateResource.Cache
