@@ -4,7 +4,9 @@
         Title="E-FIRE Interface Layout" Height="350" Width="525">
     <Grid>
         <Label Height="50" Width="300" FontWeight="Bold" FontSize="18" Content="E-FIRE Interface Program" Margin="10,10,207,259"/>
-        <TextBox Height="20" Width="350" Text="Select csv file" Margin="10,60,157,239"/>
-        <Button Name="btnOpenWebSocket" Height="30" Width="160" Content="Open Websocket Connection" Margin="10,85,347,204" Click="btnOpenWebSocket_Click"/>
+        <TextBox Width="350" Text="Select csv file" Margin="10,60,157,226"/>
+        <Button Name="btnOpenWebSocket" Content="Open Websocket Connection" Margin="10,98,287,181" Click="btnOpenWebSocket_Click"/>
+        <Label Name="lblJSON"  Width="500" Margin="6,143,11,9" />
+        <Label Name="lblWsOpen" Width="120" Height="40" Content="WebSocket is Closed" Margin="387,10,10,269"/>
     </Grid>
 </Window>

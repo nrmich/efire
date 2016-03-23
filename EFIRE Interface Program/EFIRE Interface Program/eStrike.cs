@@ -18,8 +18,8 @@ namespace Team_E_FIRE_Data_Processing_Program_BBB
             strikeTime = DateTime.Now;
             Random random = new Random();
             diodeStruck = random.Next(0, 11);
-            int whichBin = random.Next(1, 4);
-            bin = randomBin(whichBin*50, 20);
+            int whichBin = random.Next(1, 5);
+            bin = randomBin(whichBin*50, 10);
             electronEnergy = bin * 4;
         }
 
@@ -30,10 +30,12 @@ namespace Team_E_FIRE_Data_Processing_Program_BBB
                 diodeStruck + ",\"energy\":" + electronEnergy + ",\"bin\":" + bin + "}";
         }
 
+        private static Random rand = new Random();
+
         //Nate temp: function to create a Gaussian distribution
         public int randomBin(int mean, int stdDev)
         {
-            Random rand = new Random(); //reuse this if you are generating many
+            //Random rand = new Random(); //reuse this if you are generating many
             double u1 = rand.NextDouble(); //these are uniform(0,1) random doubles
             double u2 = rand.NextDouble();
             double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *

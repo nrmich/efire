@@ -54,6 +54,7 @@ namespace EFIRE_Interface_Program
                 string msg = nextStrike.createStrikeJSON();
                 Send(msg);
                 Thread.Sleep(10);
+                //MainWindow.lblJSON.Content = msg; //TODO GRRRR
             }
         }
     }
@@ -67,9 +68,12 @@ namespace EFIRE_Interface_Program
         private void btnOpenWebSocket_Click(object sender, RoutedEventArgs e)
         {
             //var wssv = new WebSocketServer("ws://localhost:8080");
-            var wssv = new WebSocketServer(8080);
+            var wssv = new WebSocketServer("ws://172.16.181.145:80");
             wssv.AddWebSocketService<DataServer>("/DataServer");
             wssv.Start();
+            btnOpenWebSocket.IsEnabled = false;
+            lblWsOpen.Content = "WebSocket is Opened";
+            
             //{strike: n, time:, diode:, energy:, bin:}
         }
     }
