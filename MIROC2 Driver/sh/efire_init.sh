@@ -1,8 +1,18 @@
+<<<<<<< HEAD
+#!/bin/bash/
+#Initialize the GPIOs used by the EFIRE Driver
+echo "Initalizing EFIRE/MIROC2 Driver Software"
+echo "Initalizing GPIO Pins"
+pushd /sys/class/gpio > /dev/null
+
+echo "ADDR Pins"
+=======
 \#!/bin/bash/
 #Initialize the GPIOs used by the EFIRE Driver.
 echo "Initalizing EFIRE/MIROC2 Driver Software"
 echo "Initalizing GPIO Pins"
 pushd /sys/class/gpio > /dev/null
+>>>>>>> master
 sh -c "echo 22 > export"
 echo out > ./gpio22/direction
 echo 0 > ./gpio22/value
@@ -33,6 +43,38 @@ echo 0 > ./gpio8/value
 GPIO8_dir="$(cat ./gpio8/direction)"
 GPIO8_val="$(cat ./gpio8/value)"
 echo "GPIO8 direction is ${GPIO8_dir} and value is ${GPIO8_val}"
+<<<<<<< HEAD
+
+echo "P&H Reset"
+sh -c "echo 60 > export"
+echo out > ./gpio60/direction
+echo 0 > ./gpio60/value
+GPIO60_dir="$(cat ./gpio60/direction)"
+GPIO60_val="$(cat ./gpio60/value)"
+echo "GPIO60 direction is ${GPIO60_dir} and value is ${GPIO60_val}"
+
+echo "MUX Enable Pins"
+sh -c "echo 48 > export"
+echo out > ./gpio48/direction
+echo 0 > ./gpio48/value
+GPIO48_dir="$(cat ./gpio48/direction)"
+GPIO48_val="$(cat ./gpio48/value)"
+echo "GPIO48 direction is ${GPIO48_dir} and value is ${GPIO48_val}"
+sh -c "echo 50 > export"
+echo out > ./gpio50/direction
+echo 0 > ./gpio50/value
+GPIO50_dir="$(cat ./gpio50/direction)"
+GPIO50_val="$(cat ./gpio50/value)"
+echo "GPIO50 direction is ${GPIO50_dir} and value is ${GPIO50_val}"
+sh -c "echo 51 > export"
+echo out > ./gpio51/direction
+echo 0 > ./gpio51/value
+GPIO51_dir="$(cat ./gpio51/direction)"
+GPIO51_val="$(cat ./gpio51/value)"
+echo "GPIO51 direction is ${GPIO51_dir} and value is ${GPIO51_val}"
+
+=======
+>>>>>>> master
 popd > /dev/null
 echo "GPIO Pins Initalized"
 echo "Initalizing DTO"
@@ -47,7 +89,11 @@ if [[ "$INPUT" == y* ]]
 		./fixedclock
 		read -p "Press enter to end TEST_CLK"
 		./halt_cmd
+<<<<<<< HEAD
+		popd > /dev/null
+=======
 		popd
+>>>>>>> master
 elif [[ "$INPUT" == n* ]]
 	then
 		echo "Not running TEST_CLK. TEST_CLK can be run from /efire/clock/mod/"
