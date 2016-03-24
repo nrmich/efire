@@ -17,7 +17,8 @@
     
     
     <!-- Morris -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css"> -->
+    <link rel="stylesheet" href="morris.js-0.5.1/morris.css">
     
     <!-- Custom styles for this template -->
     <link href="theme.css" rel="stylesheet">
@@ -253,8 +254,9 @@
                alert("WebSocket is supported by your Browser!");
                
                // Let us open a web socket
-               var ws = new WebSocket("ws://localhost:8080/DataServer");
+               //var ws = new WebSocket("ws://localhost:8080/DataServer");
 			   //var ws = new WebSocket("ws://localhost:8080/", "echo-protocol");
+			   var ws = new WebSocket("ws://172.16.181.145:80/DataServer");
 				
                ws.onopen = function()
                {
@@ -272,15 +274,19 @@
 				  //ws.send("Message to send");
                   //alert("Message is sent...");
                   strikeDataArray.unshift(received_msg);
-                  updateEFieldValue(strikeDataArray[0].diode);
+                  //updateEFieldValue(strikeDataArray[0].diode);
                   updateFWHMDataArray(received_msg);
 				  
-				  updateChart();
-				  updateEFieldValue(strikeDataArray[0].diode);
-				  updateTable();
+				  if (strikeDataArray.length % 500 == 0)
+				  {
+				  	updateChart();
+				  }
+				  //updateChart();
+				  //updateEFieldValue(strikeDataArray[0].diode);
+				  //updateTable();
 				
                };
-               //setInterval(function(){updateChart();},5000);
+               setInterval(function(){updateChart();},5000);
                //setInterval(function(){updateEFieldValue(strikeDataArray[0].diode);},1000);
                //setInterval(function(){updateTable();},2000);
                
