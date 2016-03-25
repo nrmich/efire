@@ -186,15 +186,15 @@ DISABLESTART_0:
 	QBA STARTCLOCK
 
 DISABLECLOCK_0:
+	// Pass Data to Host
+	SBBO r23, r9, 0, 4 				// Store data from ADC_0 to &r9
+	SBBO r25.w0, r9, 4, 2			// Store data for Address to &r9+4b
+	MOV R31.b0, PRU0_R31_VEC_VALID | PRU_EVTOUT_0 // Send interrupt to host
+
 	// Clear Control Signals
 	CLR r21.t0					// Clear control signal
 	CLR r30.t0 					// Clear clock
 	CLR r25.t16 				// Set CLK_0 as free
-
-	// Pass Data to Host
-	SBBO r23, r9, 0, 4 			// Store data from ADC_0 to &r9
-	SBBO r25.w0, r9, 4, 2			// Store data for Address to &r9+4b
-	MOV R31.b0, PRU0_R31_VEC_VALID | PRU_EVTOUT_0 // Send interrupt to host
 
 	// Clear Data Cache
 	MOV r23, 0x00000000

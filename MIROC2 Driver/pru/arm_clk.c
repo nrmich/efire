@@ -24,7 +24,7 @@ int transfer(int fd, unsigned char send[], unsigned char recieve[], int length){
   transfer.tx_buf = (unsigned long) send;
   transfer.rx_buf = (unsigned long) recieve;
   transfer.len = length;
-  transfer.speed_hz = 10000;
+  transfer.speed_hz = 1000000;
   transfer.bits_per_word = 8;
   transfer.delay_usecs = 0;
 
@@ -91,8 +91,8 @@ int main (void)
     exit(EXIT_FAILURE);
   }
   unsigned char *pruAddrMem_0 = pruDataMem_0 + 4; // shifted by 4 bytes
-  unsigned char *pruMem[] = {pruDataMem_0, (pruAddrMem_0 + 1), pruAddrMem_0};
-  unsigned char *recieve[] = {0,0,0};
+  unsigned char pruMem[] = {0,0,0};
+  unsigned char recieve[] = {0,0,0};
 
    // Map PRU's interrupts
    prussdrv_pruintc_init(&pruss_intc_initdata);
@@ -113,10 +113,12 @@ int main (void)
     printf("Waiting for intc...\n");
     prussdrv_pru_wait_event (PRU_EVTOUT_0);
     prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
-    printf("Value: %d\n", *pruDataMem_0);
-    printf("Channel: 0x%X%.2X\n", *(pruAddrMem_0 + 1), *(pruAddrMem_0));
-    transfer(fd, *pruMem, *recieve, 3);
-    // To fix: You need to combine the values for the address
+    pruMem[0] = *pruDataMem_0;
+    pruMem[1] = *(pruAddrMem_0 + 1);
+    pruMem[2] = *pruAddrMem_0;
+    printf("Value: %d\n", pruMem[0]);
+    printf("Channel: 0x%X%.2X\n", pruMem[1], pruMem[2]);
+    transfer(fd, pruMem, recieve, 3);
    }
 
    prussdrv_pru_disable(PRU_0);
