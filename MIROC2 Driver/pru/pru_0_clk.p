@@ -37,7 +37,7 @@
 .origin 0                        		// start of program in PRU memory
 .entrypoint START                		// program entry point (for a debugger)
 
-#define DELAY 47  				// choose the delay value to suit the frequency required
+#define DELAY 46  				// choose the delay value to suit the frequency required
 #define START_CYCLES 1
 #define CLK_CYCLES 19
 #define PnHR_CYCLES 8 				// CAREFUL: THIS VALUE MUST BE EQUAL TO CLK_CYCLES MINUS 11 for proper MIROC2 operation

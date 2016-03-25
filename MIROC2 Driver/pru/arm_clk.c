@@ -112,10 +112,10 @@ int main (void)
     // Data Collection Loop
     printf("Waiting for intc...\n");
     prussdrv_pru_wait_event (PRU_EVTOUT_0);
-    prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
     pruMem[0] = *pruDataMem_0;
     pruMem[1] = *(pruAddrMem_0 + 1);
     pruMem[2] = *pruAddrMem_0;
+    prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
     printf("Value: %d\n", pruMem[0]);
     printf("Channel: 0x%X%.2X\n", pruMem[1], pruMem[2]);
     transfer(fd, pruMem, recieve, 3);
