@@ -69,6 +69,10 @@ echo "Initalizing DTO"
 sh -c "echo EFIRE-Overlay > $SLOTS"
 cat $SLOTS | grep EFIRE-Overlay
 echo "DTO Initalized"
+echo "Initalizing SPI Device"
+sh -c "echo ADAFRUIT-SPI0 > $SLOTS"
+cat $SLOTS | grep ADAFRUIT-SPI0
+echo "SPI Initalized"
 read -p "Would you like to start the TEST_CLK? [y/n]	" INPUT
 if [[ "$INPUT" == y* ]]
 	then
