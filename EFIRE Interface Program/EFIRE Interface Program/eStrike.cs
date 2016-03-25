@@ -11,6 +11,11 @@ namespace Team_E_FIRE_Data_Processing_Program_BBB
         //        eStrike: <strike number>, time: <time>, diode: <diode>, energy: <energy based on 8-bit number and gain settings>
         //           bin: <0-255>
         //            eField: <eFieldValue>
+        public eStrike(int voltage, int diode)
+        {
+            //TODO: constructor for use in SPI_Reader
+        }
+
         public eStrike()
         {
             //Nate: Temporary constructor for random datapoints

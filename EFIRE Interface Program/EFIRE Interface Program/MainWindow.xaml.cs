@@ -47,12 +47,23 @@ namespace EFIRE_Interface_Program
 
         protected override void OnMessage(MessageEventArgs e)
         {
+            SPI_Reader BBB_reader = new SPI_Reader();
+            string testFileDestination = MainWindow.fileDestination;
+            CSV_Writer CSV_writer = new CSV_Writer(testFileDestination);
+            
             //setTimer();
-            while(true)
+            while (MainWindow.runTest == true)
             {
-                eStrike nextStrike = new eStrike();
+                eStrike nextStrike = BBB_reader.readBbbDatapoint();
                 string msg = nextStrike.createStrikeJSON();
                 Send(msg);
+                //TODO need to calculate energy somewhere
+                CSV_writer.WriteStrikeToCSV(eStrike.strikeNumber, nextStrike.diodeStruck, 0, nextStrike.strikeTime);
+                if (eStrike.strikeNumber > 1000)
+                {
+                    MainWindow.runTest = false;
+                    CSV_writer.close();
+                }
                 Thread.Sleep(10);
                 //MainWindow.lblJSON.Content = msg; //TODO GRRRR
             }
@@ -65,10 +76,16 @@ namespace EFIRE_Interface_Program
             InitializeComponent();
         }
 
+        static public string fileDestination;
+        static public bool runTest;
+
         private void btnOpenWebSocket_Click(object sender, RoutedEventArgs e)
         {
+            txtCsvTargetFile.Text = @"C:\testTargetButton.csv";
+            fileDestination = txtCsvTargetFile.Text;
+            runTest = true;
             //var wssv = new WebSocketServer("ws://localhost:8080");
-            var wssv = new WebSocketServer("ws://172.16.181.145:80");
+            var wssv = new WebSocketServer("ws://172.16.181.150:80");
             wssv.AddWebSocketService<DataServer>("/DataServer");
             wssv.Start();
             btnOpenWebSocket.IsEnabled = false;

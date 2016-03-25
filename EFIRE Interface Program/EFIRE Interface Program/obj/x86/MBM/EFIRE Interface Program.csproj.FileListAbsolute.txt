@@ -1,0 +1,12 @@
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\bin\x86\MBM\EFIRE Interface Program.exe.config
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\bin\x86\MBM\EFIRE Interface Program.exe
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\bin\x86\MBM\websocket-sharp.dll
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\EFIRE Interface Program.csprojResolveAssemblyReference.cache
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\MainWindow.baml
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\MainWindow.g.cs
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\App.g.cs
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\EFIRE Interface Program_MarkupCompile.cache
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\EFIRE Interface Program.g.resources
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\EFIRE_Interface_Program.Properties.Resources.resources
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\EFIRE Interface Program.csproj.GenerateResource.Cache
+C:\Users\Nathaniel\Documents\GitHub\efire\EFIRE Interface Program\EFIRE Interface Program\obj\x86\MBM\EFIRE Interface Program.exe
