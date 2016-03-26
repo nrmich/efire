@@ -15,8 +15,13 @@ var server = http.createServer(function(request, response) {
     response.writeHead(404);
     response.end();
 });
-server.listen(8080, function() {
-    console.log((new Date()) + ' Server is listening on port 8080');
+
+//server.listen(8080, function() {
+//    console.log((new Date()) + ' Server is listening on port 8080');
+//});
+
+server.listen(1025, function() {
+    console.log((new Date()) + ' Server is listening on port 1025');
 });
  
 wsServer = new WebSocketServer({
@@ -82,14 +87,14 @@ function sendMirocDataPoint(connection){
 	var bin = Math.floor(random.normal(center*64, 10));
 	var dataPoint = {strike: n, time: Date().toString(), diode: Math.floor(Math.random() * 13) + 1 , energy: bin * 4, bin: bin }
 	connection.send(JSON.stringify(dataPoint));
-	
-	fs.writeFile("tmp/test", JSON.stringify(dataPoint), function(err) {
-    if(err) {
-        return console.log(err);
-    }
-
-    console.log("Wrote to file" + JSON.stringify(dataPoint));
-}); 
+        console.log("sent datapoint " + JSON.stringify(dataPoint));	
+//	fs.writeFile("tmp/test", JSON.stringify(dataPoint), function(err) {
+ //   if(err) {
+ //       return console.log(err);
+//    }
+//
+//    console.log("Wrote to file" + JSON.stringify(dataPoint));
+//}); 
 	
 	n++;
 	//console.log(dataPoint);
