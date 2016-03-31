@@ -4,6 +4,10 @@ var http = require('http');
 var Random = require('./node_modules/simjs/dist/random-node-0.25.js');
 //var sim = require('simjs');
 
+// Spawning python child
+var spawn = require("child_process").spawn;
+const emitter = new EventEmitter()
+emitter.setMaxListeners(100)
 // Filesystem for writing to file
 var fs = require('fs');
 
@@ -81,20 +85,27 @@ wsServer.on('request', function(request) {
 
 // n counts number of strikes sent
 var n = 0;
+var process = spawn('python', ["dummy_data.py"]);
 
 function sendMirocDataPoint(connection){
+	/* child process */
+	process.stdout.on('data', function(data){
+			console.log(data.toString('utf8'))
+			});
+	/* Old JS Dummy Data ----------------------------------------------
 	var center = Math.floor(Math.random()*4) + 1;
 	var bin = Math.floor(random.normal(center*64, 10));
-	var dataPoint = {strike: n, time: Date().toString(), diode: Math.floor(Math.random() * 13) + 1 , energy: bin * 4, bin: bin }
+	var dataPoint = {
+			strike: n, 
+			time: Date().toString(), 
+			diode: Math.floor(Math.random() * 13) + 1 , 
+			energy: bin * 4, 
+			bin: bin 
+			}
 	connection.send(JSON.stringify(dataPoint));
-        console.log("sent datapoint " + JSON.stringify(dataPoint));	
-//	fs.writeFile("tmp/test", JSON.stringify(dataPoint), function(err) {
- //   if(err) {
- //       return console.log(err);
-//    }
-//
-//    console.log("Wrote to file" + JSON.stringify(dataPoint));
-//}); 
+        console.log("sent datapoint " + JSON.stringify(dataPoint));
+	------------------------------------------------------------------- */
+
 	
 	n++;
 	//console.log(dataPoint);
