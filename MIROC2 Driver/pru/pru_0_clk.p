@@ -98,11 +98,12 @@ MAINLOOP:
 	// Activate the leftmost free CLK and it's associated Start signal
 	CLK_0_ASSIGN:
 		QBBS STARTCLOCK, r25.t16 	// If CLK0 is busy, go to CLK1
+		LMBD r24.b0, r25.w0, 1		// Find Address and store it
 		OR r21, r21, 0b00001001		// Set's CLK0 and START0 control bits high
 		SET r25.t16				// Clock is busy
 
 		// Set MUX Enable
-		SBBO r12, r11, 0, 4		// Set MUX0 High
+		SBBO r12, r11, 0, 4			// Set MUX0 High
 		SBBO r13, r10, 0, 4 		// Set MUX1 Low
 		SBBO r14, r10, 0, 4 		// Set MUX2 Low
 		SBBO r15, r10, 0, 4 		// Set P&H Reset Low
@@ -116,8 +117,12 @@ MAINLOOP:
 // 	Suggestion from Prof. Kia: Test the clocks by keeping them exlusively high. IE: Only 1 clock goes high at a time.
 //	This is more of a sanity test. Otherwise, try to make sure the QBBS statements are good. Can also use
 
+// Currently, we are expecting the need for only 1 Clock. After testing, if it is found that 1 clock is insuffecient,
+// 		efforts will be made to add the other 2 clocks. This, however, comes at the cost of much more complexity. For
+//		the sake of time, we leave this alone for now.
+
 //	CLK_1_ASSIGN:
-//		QBBS CLK_2_ASSIGN, r25.t17 // If CLK1 is busy, go to CLK2
+//		QBBS STARTCLOCK, r25.t17 // If CLK1 is busy, go to CLK2
 //		OR r21, r21, 0b00100010 // Set's CLK1 and START1 control bits high
 //		SET r25.t17  // Clock is busy
 //		MOV r4, START_CYCLES	// Clock 1 counter
@@ -187,8 +192,8 @@ DISABLESTART_0:
 
 DISABLECLOCK_0:
 	// Pass Data to Host
-	SBBO r23, r9, 0, 4 				// Store data from ADC_0 to &r9
-	SBBO r25.w0, r9, 4, 2			// Store data for Address to &r9+4b
+	SBBO r23.b0, r9, 0, 1 			// Store data from ADC_0 to &r9
+	SBBO r24.b0, r9, 1, 1			// Store data for Address to &r9+4b
 	MOV R31.b0, PRU0_R31_VEC_VALID | PRU_EVTOUT_0 // Send interrupt to host
 
 	// Clear Control Signals
