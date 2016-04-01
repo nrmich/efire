@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>MIROC GUI v02</title>
+    <title>MIROC GUI v03</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -169,11 +169,13 @@
          		bin: i,
          		counts: 0
          	});
+         	//console.log("making the FWHMDataArray");
          }
 
 		
 		function updateFWHMDataArray(datapoint) {
 			FWHMDataArray[datapoint.bin].counts += 1;
+			
 		};
 		
 		function updateEFieldValue(diode) {
@@ -182,7 +184,7 @@
 		};
 		
 		function updateTable() {
-			
+			try{
 				document.getElementById('row1').innerHTML = strikeDataArray[0].strike;
 				document.getElementById('time1').innerHTML = strikeDataArray[0].time;
 				document.getElementById('diode1').innerHTML = strikeDataArray[0].diode;
@@ -232,6 +234,10 @@
 				document.getElementById('time10').innerHTML = strikeDataArray[9].time;
 				document.getElementById('diode10').innerHTML = strikeDataArray[9].diode;
 				document.getElementById('energy10').innerHTML = strikeDataArray[9].energy;
+			}
+			catch(err) {
+				return;
+			}
 		};
 				
 		function updateChart() {
@@ -257,8 +263,11 @@
                //var ws = new WebSocket("ws://localhost:8080/DataServer");
 			   //var ws = new WebSocket("ws://localhost:8080/", "echo-protocol");
 			   //var ws = new WebSocket("ws://172.16.181.150:80/DataServer");
-			//	var ws = new WebSocket("ws://128.197.180.185:1025", "echo-protocol");
-				var ws = new WebSocket("ws://localhost:1025", "echo-protocol");
+
+				//var ws = new WebSocket("ws://128.197.180.185:1025", "echo-protocol");
+				var ws = new WebSocket("ws://155.41.10.8:8888/ws");
+				//	var ws = new WebSocket("ws://128.197.180.185:1025", "echo-protocol");
+				// var ws = new WebSocket("ws://localhost:1025", "echo-protocol");
 				
                ws.onopen = function()
                {
@@ -285,10 +294,10 @@
 				  }
 				  //updateChart();
 				  //updateEFieldValue(strikeDataArray[0].diode);
-				  //updateTable();
+				  updateTable();
 				
                };
-               setInterval(function(){updateChart();},5000);
+               //setInterval(function(){updateChart();},5000);
                //setInterval(function(){updateEFieldValue(strikeDataArray[0].diode);},1000);
                //setInterval(function(){updateTable();},2000);
                
