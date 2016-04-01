@@ -7,6 +7,7 @@ import json
 import random
 import math
 import time
+import threading
 
 '''
 This is a simple Websocket Echo server that uses the Tornado websocket handler.
@@ -24,16 +25,27 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         print 'message received:  %s' % message
         # Reverse Message and send it back
 	#data = json.dumps({"strike": 1, "time": 2, "diode": 7, "energy": 100, "bin": 8});
+        
+        #Nate: working here - try to move to timer
+        #data = generateDataPoint(WSHandler.n)
+        #print 'sending back message: %s' % data
+        #self.write_message(data)
+        #WSHandler.n=WSHandler.n+1
+        WSHandler.sendLotsaData(self)
+ 
+    def on_close(self):
+        print 'connection closed'
+        #Nate: TODO we need to stop the timer here
+ 
+    def check_origin(self, origin):
+        return True
+    def sendLotsaData(self):
+        #Nate: sends a datapoint every .01 seconds; timer so should be nonblocking
+        threading.Timer(.01, self.sendLotsaData).start()
         data = generateDataPoint(WSHandler.n)
         print 'sending back message: %s' % data
         self.write_message(data)
         WSHandler.n=WSHandler.n+1
- 
-    def on_close(self):
-        print 'connection closed'
- 
-    def check_origin(self, origin):
-        return True
     
 
 application = tornado.web.Application([
@@ -41,18 +53,13 @@ application = tornado.web.Application([
 ])
 
 def generateDataPoint(n):
-    center = random.random()*4 + 1
-    mean = center*40
-    stdDev = 15
-    u1 = random.random()
-    u2 = random.random()
-    print u1
-    print u2
-    randStdNormal = math.sqrt(math.fabs(-2.0*math.log(u1) * math.sin(2.0*math.pi*u2)))
-    randNormal = mean + stdDev * randStdNormal
+    center = int(random.random()*4) + 1
+    mean = center*50
+    stdDev = 10
+    randNormal = random.gauss(mean, stdDev)
     #hacky way to construct a json object as a string
     #dataPoint = "{\"strike\":" + str(n) + ", \"time\":\"" + time.asctime() + "\", \"diode\":" + str(int(random.random()*12)) + ", \"energy\":" + str(randNormal*4) + ", \"bin:\"" + str(randNormal) + "}"
-    dataPoint = json.dumps({"strike": n, "time": time.asctime(), "diode": int(random.random()*12), "energy": randNormal*4, "bin": randNormal});
+    dataPoint = json.dumps({"strike": n, "time": time.asctime(), "diode": int(random.random()*12), "energy": randNormal*4, "bin": int(randNormal)});
     return dataPoint
  
  
