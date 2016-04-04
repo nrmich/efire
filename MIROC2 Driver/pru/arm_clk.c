@@ -11,10 +11,17 @@ This file is used to allocate memory to the PRU and enable it.
 #include <stdint.h>
 #include <termios.h>
 #include <string.h>
-#include <math.h>
+#include <signal.h>
 
 #define PRU_0 0
 #define PRU_1 1
+
+/* Global Variables */
+int file, count;
+
+/* Func Prototypes */
+int efireExit(void);
+void INThandler(int sig);
 
 int main (int argc, char *argv[]){
 	// Confirm root status (UART/PRU will not run otherwise)
@@ -23,8 +30,22 @@ int main (int argc, char *argv[]){
 		exit(EXIT_FAILURE);
 	}
 
+	int collisionLimit;
+	if(argc > 1){
+		if(argc == 2){
+			collisionLimit = atoi(argv[1]);
+		} else {
+			printf("Invalid argument: Collisions will not be limited.\n");
+			collisionLimit = -1;
+		}
+	} else {
+		collisionLimit = -1;
+	}
+
+	// For catching SIGINT and avoiding UART errors
+	signal(SIGINT, INThandler);
+
 	// UART Init
-	int file, count;
 	if ((file = open("/dev/ttyO2", O_RDWR | O_NOCTTY | O_NDELAY))<0){    // Modified ttyO4 -> ttyO2 for efire purposes
 		perror("UART: Failed to open the file.\n");
 		exit(EXIT_FAILURE);
@@ -44,8 +65,8 @@ int main (int argc, char *argv[]){
 
 	// Establish pointers to PRU Memory
 	unsigned char *pruMem[2];
-	prussdrv_map_prumem (0, (void*) pruMem[0]);
-	if (pruDataMem_0 == NULL){
+	prussdrv_map_prumem (0, (void*) &pruMem[0]);
+	if (pruMem[0] == NULL){
 		printf("PRU: Data Memory not mapped!\nExiting.");
 		exit(EXIT_FAILURE);
 	}
@@ -62,7 +83,7 @@ int main (int argc, char *argv[]){
 	// Data Collection Loop
 	int i = 0;
 	int error_count = 0;
-	while(i < 100){
+	while(i != collisionLimit){
 		printf("Waiting for intc...\n");
 		prussdrv_pru_wait_event (PRU_EVTOUT_0);
 		prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
@@ -75,15 +96,45 @@ int main (int argc, char *argv[]){
 			perror("Failed to write to the output\n");
 		}
 		usleep(1000); // Sleep 1ms for MBM to read data (otherwise overflows UART buffer)
-		//i++;
+		i++;
 	}
 
 	// Disable PRUs and close UART
-	prussdrv_pru_disable(PRU_0);
-	prussdrv_pru_disable(PRU_1);
-	prussdrv_exit ();
-	close(file);
+	efireExit();
 
-	// Exit
-	return EXIT_SUCCESS;
+	/* Exit -- This should not be reached
+	 efireExit() will ensure UART and PRU are disabled. */
+	return EXIT_FAILURE;
+}
+
+int efireExit(void){
+	int ctrl = 0;
+	if (prussdrv_pru_disable(PRU_0) != 0){
+		ctrl = 1;
+		printf("ERROR: PRU_0 did not disable.");
+	}
+	if (prussdrv_pru_disable(PRU_1) != 0){
+		ctrl = 1;
+		printf("ERROR: PRU_1 did not disable.");
+	}
+	prussdrv_exit (); // Always returns 0
+	
+	if (close(file) != 0){
+		ctrl = 1;
+		printf("ERROR: UART did not close.");
+	}
+
+	if(ctrl == 1){
+		printf("ERROR EXITING: Something went really wrong.");
+		exit(EXIT_FAILURE);
+	}
+	
+	printf("Exited Succesfully.\n");
+	exit(EXIT_SUCCESS);
+}
+
+void  INThandler(int sig)
+{
+     printf("\nSIGINT Detected: Closing PRU and UART Safely\n");
+     efireExit();
 }
