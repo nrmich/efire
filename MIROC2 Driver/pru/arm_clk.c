@@ -30,10 +30,12 @@ int main (int argc, char *argv[]){
 		exit(EXIT_FAILURE);
 	}
 
+	// Set Collision Limit
+	// By default, it is unlimited. User may supply an argument to limit it.
 	int collisionLimit;
 	if(argc > 1){
 		if(argc == 2){
-			collisionLimit = atoi(argv[1]);
+			collisionLimit = atoi(argv[1]);	// Assumes user knows what they are doing and will only put in an int
 		} else {
 			printf("Invalid argument: Collisions will not be limited.\n");
 			collisionLimit = -1;
@@ -87,8 +89,9 @@ int main (int argc, char *argv[]){
 		printf("Waiting for intc...\n");
 		prussdrv_pru_wait_event (PRU_EVTOUT_0);
 		prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
-		printf("Value: %d\n", *pruMem[0]);
-		printf("Channel: %d\n", *pruMem[1] + 1);
+		printf("Collision %d\n", i);
+		printf("\tValue:   %d\n", *pruMem[0]);
+		printf("\tChannel: %d\n", *pruMem[1] + 1);
 		unsigned char transmit[2];
 		transmit[0] = *pruMem[0];
 		transmit[1] = *pruMem[1] + 1; //Add 1 for readability
