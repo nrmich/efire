@@ -77,7 +77,7 @@ START:
 	MOV r1, DELAY
 
 	// Load Memory Address
-	MOV r9, 0x00000000 // Store base address in r9
+	MOV r9, DATAMEMORY_ADDR // Store data address in r9
 
 	// Load GPIO Address and Offset
 	MOV r10, GPIO_1 | GPIO_CLEARDATAOUT
