@@ -7,20 +7,17 @@ This file is used to allocate memory to the PRU and enable it.
 #include <prussdrv.h>
 #include <pruss_intc_mapping.h>
 #include <fcntl.h>
-#include <unistd.h>
-#include <stdint.h>
 #include <termios.h>
-#include <string.h>
 #include <signal.h>
 
 #define PRU_0 0
 #define PRU_1 1
 
 /* Global Variables */
-int file, count;
+int file;
 
 /* Func Prototypes */
-int efireExit(void);
+void efireExit(void);
 void INThandler(int sig);
 
 int main (int argc, char *argv[]){
@@ -47,8 +44,9 @@ int main (int argc, char *argv[]){
 	// For catching SIGINT and avoiding UART errors
 	signal(SIGINT, INThandler);
 
-	// UART Init
-	if ((file = open("/dev/ttyO2", O_RDWR | O_NOCTTY | O_NDELAY))<0){    // Modified ttyO4 -> ttyO2 for efire purposes
+	// UART Initialization
+	int count;
+	if ((file = open("/dev/ttyO2", O_RDWR | O_NOCTTY | O_NDELAY))<0){
 		perror("UART: Failed to open the file.\n");
 		exit(EXIT_FAILURE);
 	}
@@ -65,7 +63,7 @@ int main (int argc, char *argv[]){
 	prussdrv_init ();
 	prussdrv_open (PRU_EVTOUT_0);
 
-	// Establish pointers to PRU Memory
+	// Declare and assign pointers to PRU Memory
 	unsigned char *pruMem[2];
 	prussdrv_map_prumem (0, (void*) &pruMem[0]);
 	if (pruMem[0] == NULL){
@@ -84,24 +82,37 @@ int main (int argc, char *argv[]){
 
 	// Data Collection Loop
 	int i = 0;
-	int error_count = 0;
 	while(i != collisionLimit){
+		// Increment collision counter
+		i++;
+
+		// Wait for interrupt from PRU
 		printf("Waiting for intc...\n");
 		prussdrv_pru_wait_event (PRU_EVTOUT_0);
 		prussdrv_pru_clear_event (PRU_EVTOUT_0, PRU0_ARM_INTERRUPT);
+
+		// Print data for user (Future feature: Disable printing to stdout unless a -DEBUG argument is passed)
 		printf("Collision %d\n", i);
 		printf("\tValue:   %d\n", *pruMem[0]);
 		printf("\tChannel: %d\n", *pruMem[1] + 1);
+
+		// Store data for transmission
 		unsigned char transmit[2];
 		transmit[0] = *pruMem[0];
-		transmit[1] = *pruMem[1] + 1; //Add 1 for readability
-		if ((count = write(file, &transmit, 2))<0){        //send the string
+		transmit[1] = *pruMem[1] + 1; //Add 1 to channel for readability
+
+		// Transmit data over UART
+		if ((count = write(file, &transmit, 2))<0){  //send the string
 			perror("Failed to write to the output\n");
 		}
-		usleep(1000); // Sleep 1ms for MBM to read data (otherwise overflows UART buffer)
-		i++;
+
+		usleep(1000); 	// Sleep 1ms for MBM to read data (otherwise overflows UART buffer)
+						// This value can be lowered to increase speed, at the cost of security
 	}
 
+	// Clear PRU memory pointers
+	*pruMem[0] = 0;
+	*pruMem[1] = 0;
 	// Disable PRUs and close UART
 	efireExit();
 
@@ -110,7 +121,7 @@ int main (int argc, char *argv[]){
 	return EXIT_FAILURE;
 }
 
-int efireExit(void){
+void efireExit(void){
 	int ctrl = 0;
 	if (prussdrv_pru_disable(PRU_0) != 0){
 		ctrl = 1;
@@ -122,6 +133,7 @@ int efireExit(void){
 	}
 	prussdrv_exit (); // Always returns 0
 	
+	tcflush(file, TCIOFLUSH);
 	if (close(file) != 0){
 		ctrl = 1;
 		printf("ERROR: UART did not close.");
