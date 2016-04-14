@@ -36,7 +36,7 @@ strikeNumber = 0
 sum = 0
 CSV_file_initializer('EFIRE.txt')
 # !!!! Keep in mind, the loop is for testing; there will be a loop in the main program
-for i in range (1,1001):
+for i in range (1,10001):
         '''
         #1 byte for energy and 1 byte for channel (NOT diode, must translate according to Analog Board)
         currentEnergy = b"00000011" #decimal value 3 for energy
@@ -70,7 +70,7 @@ for i in range (1,1001):
                         12 : 6,
                         14 : 4,
                         15 : 5,
-                        16 : 6,
+                        16 : 7,
                 }.get(channel, 'ERROR: Channel number receieved was out of bounds!')
         diodeStruck = channel_to_diode(channel)
         
