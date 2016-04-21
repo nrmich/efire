@@ -127,7 +127,7 @@
   		<h1>Simulated E-Field</h1>
   		<p>Displays data from a live calculation, based on last diode strike, in units of mV/m</p>
   	</div>
-  	<label for="basic-url">Input B-field in Teslas</label>
+  	<label>Input B-field in Teslas</label>
 	<div class="input-group">
 	  <input type="text" class="form-control" id="BfieldInput" aria-describedby="basic-addon3">
 	</div>
@@ -163,10 +163,14 @@
 	<script src="morris.js-0.5.1/morris.min.js"></script>
     
     
+    <label>WebSocket target address</label>
+	<div class="form-group">
+	  <input type="text" class="form-control" id="WebSocketInput" aria-describedby="basic-addon3" value="ws://155.41.101.2:8888/ws">
+	</div>
+    
     <div id="sse">
     	<a class="btn btn-large btn-success" href="javascript:WebSocketTest()">Run WebSocket</a>
     </div>
-    
     
     <script type="text/javascript">
          var strikeDataArray = [];
@@ -206,6 +210,8 @@
 			//E, B assumed perpendicular
 			//v, B perpendicular due to spacecraft orientation
 			
+			//TODO convert energy to Joules
+			
 			//relativity
 			gamma = 1 + energy1 / (m * c^2); //relativity constant
 			omega = q * B / (gamma * m); //relativistic gyro frequency
@@ -219,10 +225,7 @@
 			//Dealing with v_gradB... TODO
 			//need to ensure that we get two different energies
 			//gradB = ??;  //TODO should really deal with this but for now let's leave it here
-			//v_exb = x / t;  //velocity due to ExB calculated from displacement and gyration time
-			
-			
-			
+			//v_exb = x / t;  //velocity due to ExB calculated from displacement and gyration time	
 		};
 		
 		function updateTable() {
@@ -308,9 +311,12 @@
 
 				//var ws = new WebSocket("ws://128.197.180.185:1025", "echo-protocol");
 				//var ws = new WebSocket("ws://155.41.10.8:8888/ws");
-				var ws = new WebSocket("ws://155.41.101.2:8888/ws"); //Connects to MBM on 4/15/2016
+				//var ws = new WebSocket("ws://155.41.101.2:8888/ws"); //Connects to MBM on 4/15/2016
 				//	var ws = new WebSocket("ws://128.197.180.185:1025", "echo-protocol");
 				//var ws = new WebSocket("ws://localhost:1025", "echo-protocol"); //connects to nodejs on 4/17/2016
+				
+				TargetAddress = document.getElementById("BfieldInput").value;
+				var ws = new WebSocket(TargetAddress);
 				
                ws.onopen = function()
                {
