@@ -305,18 +305,9 @@
                alert("WebSocket is supported by your Browser!");
                
                // Let us open a web socket
-               //var ws = new WebSocket("ws://localhost:8080/DataServer"); //connects to C# program
-			   //var ws = new WebSocket("ws://localhost:8080/", "echo-protocol"); //Connects to node.js
-			   //var ws = new WebSocket("ws://172.16.181.150:80/DataServer");
-
-				//var ws = new WebSocket("ws://128.197.180.185:1025", "echo-protocol");
-				//var ws = new WebSocket("ws://155.41.10.8:8888/ws");
-				//var ws = new WebSocket("ws://155.41.101.2:8888/ws"); //Connects to MBM on 4/15/2016
-				//	var ws = new WebSocket("ws://128.197.180.185:1025", "echo-protocol");
-				//var ws = new WebSocket("ws://localhost:1025", "echo-protocol"); //connects to nodejs on 4/17/2016
-				
-				TargetAddress = document.getElementById("BfieldInput").value;
+				TargetAddress = document.getElementById("WebSocketInput").value;
 				var ws = new WebSocket(TargetAddress);
+				//var ws = new WebSocket("ws://168.122.3.53:8888/ws"); // Backup
 				
                ws.onopen = function()
                {
