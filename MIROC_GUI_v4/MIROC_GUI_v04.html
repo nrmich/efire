@@ -125,7 +125,7 @@
   	
   	<div class="page-header">
   		<h1>Simulated E-Field</h1>
-  		<p>Displays data from a live calculation, based on last diode strike, in units of mV/m</p>
+  		<p>Displays data from a live calculation, based on last diode strike, in units of V/m</p>
   	</div>
   	<label>Input B-field in Teslas</label>
 	<div class="input-group">
@@ -195,7 +195,7 @@
 			//document.getElementById('lastDiode').innerHTML = diode;
 			
 			//known values
-			energy1 = strikeDataArray[0].energy; //strike1 energy in keV
+			energy1 = strikeDataArray[0].energy*1.602677e-16; //strike1 energy in keV (convert to J)
 			//energy2 = strikeDataArray[1].energy; //strike1 energy in keV
 			m = 9.10938356e-31; //electron mass in kilograms
 			c = 2.99792458e8; //speed of light in m/s
